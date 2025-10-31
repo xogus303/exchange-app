@@ -1,11 +1,13 @@
 import { useGetWallets } from "@/api/hooks/useGetWallets";
 import GrayBoard from "@/components/ui/grayBoard";
+import { Skeleton } from "@/components/ui/skeleton";
 import { currencyFormat, formatComma } from "@/lib/utils";
 import React from "react";
 
 export default React.memo(function MyWallet() {
-  const { data } = useGetWallets();
+  const { data, isLoading } = useGetWallets();
 
+  if (isLoading) return <MyWalletsSkeleton />;
   return (
     <GrayBoard className="flex-1">
       <div className="flex flex-1 flex-col gap-4">
@@ -36,3 +38,7 @@ export default React.memo(function MyWallet() {
     </GrayBoard>
   );
 });
+
+function MyWalletsSkeleton() {
+  return <Skeleton className="flex-1 rounded-[12px]" />;
+}

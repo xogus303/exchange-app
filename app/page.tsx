@@ -5,9 +5,11 @@ import Layout from "@/components/ui/layout";
 import ExchangeRatesCard from "./components/exchangeRatesCard";
 import MyWallet from "./components/myWallet";
 import ExchangeBox from "./components/exchangeBox";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Main() {
-  const { data: exchangeRatesLatestData } = useGetExchangeRatesLatest();
+  const { data: exchangeRatesLatestData, isLoading } =
+    useGetExchangeRatesLatest();
 
   return (
     <Layout
@@ -16,20 +18,31 @@ export default function Main() {
     >
       <div className="flex flex-1 gap-6 ">
         <div className="flex flex-col flex-1 gap-6">
-          <div id="ExchangeRatesLatestList" className="flex space-x-5">
-            {exchangeRatesLatestData &&
-              exchangeRatesLatestData.data
-                .reverse()
-                .map((rate) => (
-                  <ExchangeRatesCard key={rate.exchangeRateId} {...rate} />
-                ))}
-          </div>
+          {isLoading ? (
+            <ExchanageRatesLatestListSkeleton />
+          ) : (
+            <div id="ExchangeRatesLatestList" className="flex space-x-5">
+              {exchangeRatesLatestData &&
+                exchangeRatesLatestData.data
+                  .reverse()
+                  .map((rate) => (
+                    <ExchangeRatesCard key={rate.exchangeRateId} {...rate} />
+                  ))}
+            </div>
+          )}
           <MyWallet />
         </div>
         <ExchangeBox exchangeRatesLatest={exchangeRatesLatestData?.data} />
-        {/* <div className="flex flex-col flex-1">
-        </div> */}
       </div>
     </Layout>
+  );
+}
+
+function ExchanageRatesLatestListSkeleton() {
+  return (
+    <div className="flex space-x-5">
+      <Skeleton className="flex-1 h-[140px] w-12 rounded-[12px]" />
+      <Skeleton className="flex-1 h-[140px] w-12 rounded-[12px]" />
+    </div>
   );
 }
